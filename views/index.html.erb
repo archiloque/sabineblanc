@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <title>Sabine Blanc, journaliste web</title>
+  <meta charset="utf-8">
+  <style type="text/css">
+      * {
+          margin: 0;
+          padding: 0;
+          font-family: 'Helvetica Neue', 'Helvetica', 'Arial', cursive;
+          color: #444444;
+      }
+      a {
+          color: inherit;
+          text-decoration: none;
+      }
+      a:hover {
+          color: inherit;
+          text-decoration: underline;
+      }
+
+      h1 {
+          text-align: center;
+          font-size: 48px;
+          font-variant: small-caps;
+          padding-top: 5px;
+      }
+
+      h2 {
+          text-align: center;
+          padding-bottom: 20px;
+          font-variant: small-caps;
+      }
+      h3 {
+          margin-left: auto;
+          margin-right: auto;
+          text-align: center;
+          max-width: 960px;
+          font-size: 16px;
+      }
+      h3 a {
+          text-decoration: underline;
+      }
+      h3 a:hover {
+          text-decoration: none;
+      }
+
+      #contact {
+          position: absolute;
+          padding-top: 20px;
+          padding-left: 20px;
+          z-index: -1;
+      }
+
+      #contact > a > img {
+          width: 30px;
+          height: 30px;
+          border-radius: 10px;
+      }
+      #cv {
+          display: inline-block;
+          width: 28px;
+          height: 28px;
+          border-radius: 5px;
+          border: 1px #444444 solid;
+          text-align: center;
+          line-height: 30px;
+          vertical-align: top;
+      }
+      #email {
+          background:url('/mail.png') no-repeat center center;
+          display: inline-block;
+          height: 30px;
+          width: 164px;
+      }
+
+      #items {
+          padding-top: 5px;
+          padding-bottom: 20px;
+          max-width: 960px;
+          margin-left: auto;
+          margin-right: auto;
+      }
+
+      .itemOuter {
+          display: inline-block;
+      }
+      .item {
+          display: table-cell;
+          vertical-align: middle;
+          text-align: center;
+          font-size: 16px;
+          font-weight: bold;
+          width: 470px;
+          height: 120px;
+          margin-left: 3px;
+          margin-right: 3px;
+          margin-bottom: 5px;
+          background-repeat: no-repeat;
+          background-size: 100% auto;
+          border-radius: 2px;
+          border: 1px #DDDDDD solid;
+          text-shadow:
+              -1px -1px 0 #F5F5F5,
+              1px -1px 0 #F5F5F5,
+              -1px 1px 0 #F5F5F5,
+              1px 1px 0 #F5F5F5;
+      }
+
+      #twitter_update_list {
+          width: 250px;
+      }
+      #twitter_update_list ul {
+          font-size: 12px;
+      }
+      #twitter_update_list li {
+          list-style: none;
+          font-size: 12px;
+          padding-bottom: 3px;
+      }
+
+      @media screen and (max-width: 1023px) {
+          #contact {
+              position: relative;
+          }
+          #items {
+              max-width: 100%;
+              margin-left: 0;
+              margin-right: 0;
+          }
+          .itemOuter {
+              display: inline-table;
+              width: 100%;
+          }
+          .item {
+              width: 100%;
+          }
+
+      }
+  </style>
+  <script>
+      function twitterCallback2(twitters) {
+          var statusHTML = [];
+          for (var i=0; i<twitters.length; i++){
+              var username = twitters[i].user.screen_name;
+              var status = twitters[i].text.replace(/((https?|s?ftp|ssh)\:\/\/[^"\s\<\>]*[^.,;'">\:\s\<\>\)\]\!])/g, function(url) {
+                  return '<a href="'+url+'">'+url+'</a>';
+              }).replace(/\B@([_a-z0-9]+)/ig, function(reply) {
+                          return  reply.charAt(0)+'<a href="http://twitter.com/'+reply.substring(1)+'">'+reply.substring(1)+'</a>';
+                      });
+              statusHTML.push('<li><span>'+status+'</span> <a style="font-size:85%" href="http://twitter.com/'+username+'/statuses/'+twitters[i].id_str+'">'+relative_time(twitters[i].created_at)+'</a></li>');
+          }
+          document.getElementById('twitter_update_list').innerHTML = statusHTML.join('');
+      }
+
+      function relative_time(time_value) {
+          var values = time_value.split(" ");
+          time_value = values[1] + " " + values[2] + ", " + values[5] + " " + values[3];
+          var parsed_date = Date.parse(time_value);
+          var relative_to = (arguments.length > 1) ? arguments[1] : new Date();
+          var delta = parseInt((relative_to.getTime() - parsed_date) / 1000);
+          delta = delta + (relative_to.getTimezoneOffset() * 60);
+
+          if (delta < 60) {
+              return '- 1 minute';
+          } else if(delta < 120) {
+              return '- 1 minute ';
+          } else if(delta < (60*60)) {
+              return '- ' + (parseInt(delta / 60)).toString() + ' minutes';
+          } else if(delta < (120*60)) {
+              return '- 1 heure';
+          } else if(delta < (24*60*60)) {
+              return '- ' + (parseInt(delta / 3600)).toString() + ' heures';
+          } else if(delta < (48*60*60)) {
+              return '- 1 jour';
+          } else {
+              return '- ' + (parseInt(delta / 86400)).toString() + ' jours';
+          }
+      }
+  </script>
+</head>
+<body>
+<div id="contact">
+  <a id="cv" title="CV" href="/cvSabineBlanc.pdf">CV</a>
+  <a title="Twitter" href="http://twitter.com/sabineblanc/"><img src="/twitter.png" alt="Twitter"></a>
+  <a title="Facebook" href="https://www.facebook.com/sabine.blanc"><img src="/facebook.png" alt="Facebook"></a>
+  <span id="email"></span>
+  <ul id="twitter_update_list"></ul>
+</div>
+
+<h1>Sabine Blanc</h1>
+
+<h2>journaliste web</h2>
+<h3>
+  Journaliste sur <a href="http://owni.fr">Owni.fr</a>,
+  spécialisée sur le <a href="http://www.amazon.fr/Hackers-Bâtisseurs-depuis-1959-ebook/dp/B009NF67BE">hacking</a>,
+  la sécurité et l'éducation numérique ; applications web de datajournalisme et infographies ; editing ; community management ;
+  organisation d'événements (<a href="http://hackthepress.net/">Hack The Press</a>,
+  <a href="http://openbidouillecamp.tumblr.com/post/31328607888/le-premier-open-bidouille-camp-ouvre-ses-portes">Open Bidouille Camp</a>).  
+</h3>
+
+<div id="items">
+  <% @items.each do |item| %>
+      <div class="itemOuter"><%= "<a style=\"background-image:url('#{item.image}');\" class=\"item\" href=\"#{item.url}\">#{item.title.end_with?(' OWNI, News, Augmented') ? item.title[0..-25] : item.title}</a>" %></div>
+  <% end %>
+</div>
+
+<script type="text/javascript" src="http://api.twitter.com/1/statuses/user_timeline.json?callback=twitterCallback2&screen_name=sabineblanc&count=1&include_rts=true"></script>
+</body>
+</html>
