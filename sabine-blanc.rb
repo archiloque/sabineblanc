@@ -63,6 +63,7 @@ class SabineBlanc < Sinatra::Base
         update_item(feed_item)
       end
     end
+    'OK'
   end
 
   def scrape_article(article_url)
